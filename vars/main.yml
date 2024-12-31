@@ -1,39 +1,40 @@
 # If there is no vcenter, use the esxi host crendentials
 # to complete the vcenter variables
-vcenter_address: 192.168.123.20
+vcenter_address: 10.103.16.10
 vcenter_username: administrator@vsphere.local
-vcenter_password: P@ssw0rd
+vcenter_password: VMware2024!
 
 # # If there is no vcenter, use 'ha-datacenter'
-vcenter_datacenter: Datacenter
+vcenter_datacenter: dc3
+
 
 # Default cluster for new VM provisioning
 # if there is no cluster set it to ""
-vcenter_cluster: "Resource Cluster"
+vcenter_cluster: "b460c - v7"
 cluster_hosts:
-  - 192.168.123.47
-  - 192.168.123.48
-  - 192.168.123.49
+  - dc3-hst-esxi01.humbledgeeks.com
+  - dc3-hst-esxi02.humbledgeeks.com
+  - dc3-hst-esxi03.humbledgeeks.com
 #vcenter_cluster: "Management Cluster"
 
 # Credentials for a host with access to the datastore
 # Used when ISOs are missing from the ISO datastore
-esxi_address: 192.168.123.47
+esxi_address: dc3-hst-esxi01.humbledgeeks.com
 esxi_username: root
-esxi_password: P@ssw0rd
+esxi_password: VMware2024!
 
 # If there is a vcenter, this must match the host's name in vcenter inventory
 # if there is no vcenter, the name can be the IP address
-esxi_hostname: "esx48.schlab.pri"
+esxi_hostname: "dc3-hst-esxi01.humbledgeeks.com"
 
 # Default datastore for new VMs
-vm_datastore: "TestVMs"
+vm_datastore: "NFS_DS03"
 
 # Default datastore for ISO files
-iso_datastore: "ISOs"
+iso_datastore: "NFS_DS03"
 
 # Default portgroup for new VMs
-vm_network: "VM Network"
+vm_network: "dc3-vmdata"
 
 # Default vswitch for new portgroups
 esxi_vswitch: "vSwitch1"
