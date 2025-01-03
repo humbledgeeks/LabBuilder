@@ -28,16 +28,16 @@ esxi_password: VMware2024!
 esxi_hostname: "dc3-hst-esxi01.humbledgeeks.com"
 
 # Default datastore for new VMs
-vm_datastore: "NFS_DS03"
+vm_datastore: "LABs"
 
 # Default datastore for ISO files
-iso_datastore: "NFS_DS03"
+iso_datastore: "LABISOS"
 
 # Default portgroup for new VMs
 vm_network: "dc3-vmdata"
 
 # Default vswitch for new portgroups
-esxi_vswitch: "vSwitch1"
+esxi_vswitch: "vSwitch0"
 
 # uncomment to test ESX target mode
 # vcenter_address: 192.168.123.49
@@ -51,11 +51,11 @@ vlan_start: 1000
 vlan_count: 1000
 
 # ONTAP vars required to build lab pod datastores
-ontap_address: "192.168.123.10"
-ontap_password: "P@ssw0rd"
-ontap_svm_name: "svm33"
-ontap_svm_address: "192.168.123.33"
-ontap_svm_lif: "svm1_lif1"
-ontap_vol_labs: "Labs"
+ontap_address: "10.103.15.230"
+ontap_password: "ENT360adm1n^^"
+ontap_svm_name: "svm0"
+ontap_svm_address: "10.103.15.131"
+ontap_svm_lif: "n1-nfs-lif02"
+ontap_vol_labs: "LABs"
 ontap_vol_size_gb: 500
-ontap_aggregate: "ots10_01_SSD_1"
+ontap_aggregate: "FAS8200_01_SAS_1"
