@@ -20,88 +20,20 @@
   community.vmware.vsphere_file:
     hostname: '{{ vcenter_address }}'
     username: '{{ vcenter_username }}'
-    password: '{{ vcenter_password }}'   
+    password: '{{ vcenter_password }}'
     validate_certs: no
-    datacenter: "{{ vcenter_datacenter }}"
+    datacenter: "{{vcenter_datacenter}}"
     datastore: "{{ iso_datastore }}"
-    path: "{{ _install_iso }}"
+    path: "{{ install_iso }}"
     state: file
   register: install_iso_exists
   delegate_to: localhost
-  ignore_errors: true 
+  ignore_errors: true
 
-- name: Add ESXi to Ansible Hosts for SSH
-  add_host:
-    name: '{{ esxi_address }}'
-    group: "esx"
-    ansible_user: '{{ esxi_username }}'
-    ansible_password: '{{ esxi_password }}'
-    ansible_ssh_common_args: '-o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no'
+# upload install iso
+- name: upload install iso
+  include_tasks: upload_install_iso.yml
   when: install_iso_exists.failed
-
-- name: Enable ESX SSH (TSM-SSH)
-  community.vmware.vmware_host_service_manager:
-    hostname: '{{ vcenter_address }}'
-    username: '{{ vcenter_username }}'
-    password: '{{ vcenter_password }}'  
-    validate_certs: no 
-    esxi_hostname: '{{ esxi_hostname }}'
-    service_name: TSM-SSH
-    state: present
-  register: tsm_ssh_service
-  delegate_to: localhost
-  when: install_iso_exists.failed
-
-- name: Enable ESX Shell (TSM)
-  community.vmware.vmware_host_service_manager:
-    hostname: '{{ vcenter_address }}'
-    username: '{{ vcenter_username }}'
-    password: '{{ vcenter_password }}'  
-    validate_certs: no 
-    esxi_hostname: '{{ esxi_hostname }}'
-    service_name: TSM
-    state: present
-  register: tsm_service
-  delegate_to: localhost
-  when: install_iso_exists.failed
-
-- name: Download the pfSense ISO
-  shell: 'wget -P /vmfs/volumes/{{ iso_datastore }} {{ _install_iso_url }}'
-  args:
-    creates: '/vmfs/volumes/{{ iso_datastore }}/{{ _install_iso }}.gz'
-  delegate_to: '{{ esxi_address }}'
-  when: install_iso_exists.failed
-
-- name: Extract the pfSense ISO
-  shell: 'gunzip /vmfs/volumes/{{ iso_datastore }}/{{ _install_iso }}.gz'
-  args:
-    creates: '/vmfs/volumes/{{ iso_datastore }}/{{ _install_iso }}'
-  delegate_to: '{{ esxi_address }}'
-  when: install_iso_exists.failed
-
-- name: Disable ESX SSH (TSM-SSH)
-  community.vmware.vmware_host_service_manager:
-    hostname: '{{ vcenter_address }}'
-    username: '{{ vcenter_username }}'
-    password: '{{ vcenter_password }}'  
-    validate_certs: no 
-    esxi_hostname: '{{ esxi_hostname }}'
-    service_name: TSM-SSH
-    state: absent
-  delegate_to: localhost
-  when: tsm_ssh_service.changed
-
-- name: Disable ESX Shell (TSM)
-  community.vmware.vmware_host_service_manager:
-    hostname: '{{ vcenter_address }}'
-    username: '{{ vcenter_username }}'
-    password: '{{ vcenter_password }}'  
-    validate_certs: no 
-    esxi_hostname: '{{ esxi_hostname }}'
-    service_name: TSM
-    state: absent
-  delegate_to: localhost
-  when: tsm_service.changed
 
 - name: Create VM
   community.vmware.vmware_guest:
@@ -189,20 +121,24 @@
       password: '{{ vcenter_password }}'   
       validate_certs: no 
       name: "{{ _vm_name }}"
-      keys_send: ENTER
-      string_send: "{{item}}"
+      keys_send: "{{item}}"
     delegate_to: localhost
     loop_control:
       pause: 5
     loop: 
-      - "" # enter # ACCEPT
-      - "" # enter
-      - "" # enter
-      - "" # enter # AutoFS-OK
+      - "ENTER" # enter # ACCEPT
+      - "ENTER" # enter # Install pfSense
+      - "ENTER" # enter # AutoFS-OK (ZFS)
+      - "ENTER" # enter # Proceed
+      - "ENTER" # enter # stripe - no redundancy
+      - "SPACE" # Select disk
+      - "ENTER" # Accept Disk
+      - "LEFTARROW" # YES
+      - "ENTER" # Proceed with install
 
-  - name: 'Wait {{install_timer|default(180)}} seconds for install'
+  - name: 'Wait {{install_timer|default(90)}} seconds for install'
     wait_for: 
-      timeout: "{{install_timer|default(180)}}"
+      timeout: "{{install_timer|default(90)}}"
     delegate_to: localhost
 
   - name: Blind Install part 2
@@ -222,8 +158,8 @@
       - "" # enter # reboot
       - "" # enter # extra enter
 
-  - name: Wait 120 seconds for reboot
-    wait_for: timeout=120
+  - name: Wait 90 seconds for reboot
+    wait_for: timeout=90
     delegate_to: localhost
 
   - name: Blind Install part 3 - Open-VM-Tools
@@ -309,25 +245,25 @@
   when: copyconfig is succeeded
 
 # Any additional packages required need to be installed 
-- name: Run shell commands via vm_shell
-  community.vmware.vmware_vm_shell:
-    hostname: '{{ vcenter_address }}'
-    username: '{{ vcenter_username }}'
-    password: '{{ vcenter_password }}'   
-    validate_certs: no 
-    vm_username: "root"
-    vm_password: '{{ _vm_password_new }}'
-    vm_id: '{{ _vm_name }}'
-    vm_shell: '/bin/sh'
-    vm_shell_args: " -c \"{{item}}\""
-    wait_for_process: true
-  delegate_to: localhost  
-  retries: 3
-  delay: 10
-  register: result
-  until: result is succeeded
-  ignore_errors: true
-  loop:
-    - "pkg-static install -y pfSense-pkg-tftpd"
+# - name: Run shell commands via vm_shell
+#   community.vmware.vmware_vm_shell:
+#     hostname: '{{ vcenter_address }}'
+#     username: '{{ vcenter_username }}'
+#     password: '{{ vcenter_password }}'   
+#     validate_certs: no 
+#     vm_username: "root"
+#     vm_password: '{{ _vm_password_new }}'
+#     vm_id: '{{ _vm_name }}'
+#     vm_shell: '/bin/sh'
+#     vm_shell_args: " -c \"{{item}}\""
+#     wait_for_process: true
+#   delegate_to: localhost  
+#   retries: 3
+#   delay: 10
+#   register: result
+#   until: result is succeeded
+#   ignore_errors: true
+#   loop:
+#     - "pkg-static install -y pfSense-pkg-tftpd"
 
  
