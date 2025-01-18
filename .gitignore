@@ -1,4 +1,4 @@
-
+# Add Files to Ignore to this file that you dont want uploaded to the repository.
 *.iso
 *.ova
 *.tgz
@@ -8,6 +8,7 @@ files/.DS_Store
 files/CentOS8/.DS_Store
 .DS_Store
 *.vib
+files/*.ova
 files/*.tgz
 files/pfsense/config.xml.bak01
 files/AIQUM/ActiveIQUnifiedManager-9.8/ActiveIQUnifiedManager-9.8.ovf
