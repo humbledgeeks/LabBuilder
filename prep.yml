@@ -1,5 +1,5 @@
 ---
-- name: "Prepare new lab pod"
+- name: "Prepare New Lab Pod"
   hosts: localhost
   gather_facts: false
   vars_files:

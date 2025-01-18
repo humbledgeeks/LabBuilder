@@ -13,8 +13,8 @@ vcenter_datacenter: dc3
 vcenter_cluster: "b460c - v7"
 cluster_hosts:
   - dc3-hst-esxi01.humbledgeeks.com
-  - dc3-hst-esxi02.humbledgeeks.com
-  - dc3-hst-esxi03.humbledgeeks.com
+#  - dc3-hst-esxi02.humbledgeeks.com
+#  - dc3-hst-esxi03.humbledgeeks.com
 #vcenter_cluster: "Management Cluster"
 
 # Credentials for a host with access to the datastore
@@ -34,7 +34,7 @@ vm_datastore: "LABs"
 iso_datastore: "LABISOS"
 
 # Default portgroup for new VMs
-vm_network: "dc3-vmdata"
+vm_network: "dc3-apps"
 
 # Default vswitch for new portgroups
 esxi_vswitch: "vSwitch0"
