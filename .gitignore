@@ -1,12 +1,14 @@
 
 *.iso
 *.ova
+*.tgz
 *.DS_Store
 vars/rhsm_secrets.yml
 files/.DS_Store
 files/CentOS8/.DS_Store
 .DS_Store
 *.vib
+files/*.tgz
 files/pfsense/config.xml.bak01
 files/AIQUM/ActiveIQUnifiedManager-9.8/ActiveIQUnifiedManager-9.8.ovf
 files/VSC/netapp-unified-virtual-appliance-for-vsc-vp-sra-9.7.1P1-6743-20201214_0955/netapp-unified-virtual-appliance-for-vsc-vp-sra-9.7.1P1-6743-20201214_0955.ovf
