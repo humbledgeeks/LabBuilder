@@ -1,0 +1,88 @@
+all:
+  hosts:
+  vars:
+    lab_name: lab_rancher
+    lab_prefix: "{{ lab_name }}_"
+    lab_netmask: 255.255.255.0
+    lab_password: P@ssw0rd
+    lab_vm_datastore: lab_rancher
+    lab_wan_portgroup: "VM Network"
+    lab_lan1_portgroup: "lab_rancher_net1"
+    lab_lan1_netmask_cidr: "24"
+    lab_lan1_netmask: "255.255.255.0"
+    lab_lan1_gateway: "192.168.0.1"
+    lab_lan1_dns_ip: "192.168.0.1"
+    lab_domain_name:   "lab.local"
+    lab_domain_controller: "dc01"
+  children:
+    pfsense:
+      hosts:
+        gateway:
+          vm_network_wan: "{{lab_wan_portgroup}}"
+          vm_network_lan: "{{lab_lan1_portgroup}}"
+          config_xml_file: "files/pfsense/config.xml"
+    dc:
+      hosts:
+        dc01:
+          version: "Server2019eval"
+          ip_address: 192.168.0.11
+    centos:
+      vars:
+        vm_memory_mb: 4096
+        vm_num_cpus: 2
+        vm_disk_gb: 40
+        install_xrdp: true
+        distro: "centos"
+        version: "7"
+      hosts:
+        rancher:
+          ip_address: 192.168.0.40
+          vm_memory_mb: 6144
+          extra_commands:
+            # Install Docker-CE
+            - "yum install -y epel-release"
+            - "yum remove -y python-docker-py docker docker-client docker-client-latest docker-common docker-latest docker-latest-logrotate docker-logrotate docker-engine"
+            - "yum-config-manager --add-repo=https://download.docker.com/linux/centos/docker-ce.repo"
+            - "yum install -y docker-ce docker-ce-cli containerd.io"
+            - "systemctl enable docker --now"
+            # Install Rancher
+            - "docker run -d --restart=unless-stopped -p 8080:8080 rancher/server"
+            # Open Firewall
+            - "firewall-cmd --permanent --add-port=8080/tcp"
+            - "firewall-cmd --reload"
+        worker1:
+          ip_address: 192.168.0.41
+          extra_commands:
+            # Install Docker-CE
+            - "yum install -y epel-release"
+            - "yum remove -y python-docker-py docker docker-client docker-client-latest docker-common docker-latest docker-latest-logrotate docker-logrotate docker-engine"
+            - "yum-config-manager --add-repo=https://download.docker.com/linux/centos/docker-ce.repo"
+            - "yum install -y docker-ce docker-ce-cli containerd.io"
+            - "systemctl enable docker --now"
+        worker2:
+          ip_address: 192.168.0.42
+          extra_commands:
+            # Install Docker-CE
+            - "yum install -y epel-release"
+            - "yum remove -y python-docker-py docker docker-client docker-client-latest docker-common docker-latest docker-latest-logrotate docker-logrotate docker-engine"
+            - "yum-config-manager --add-repo=https://download.docker.com/linux/centos/docker-ce.repo"
+            - "yum install -y docker-ce docker-ce-cli containerd.io"
+            - "systemctl enable docker --now"
+        worker3:
+          ip_address: 192.168.0.43
+          extra_commands:
+            # Install Docker-CE
+            - "yum install -y epel-release"
+            - "yum remove -y python-docker-py docker docker-client docker-client-latest docker-common docker-latest docker-latest-logrotate docker-logrotate docker-engine"
+            - "yum-config-manager --add-repo=https://download.docker.com/linux/centos/docker-ce.repo"
+            - "yum install -y docker-ce docker-ce-cli containerd.io"
+            - "systemctl enable docker --now"
+    vsims:
+      hosts:
+        vsim1-01:
+          ontap_version: "9.8"
+          ip_address: 192.168.0.71
+          sys_serial_num: "4082368-50-7"
+          cluster_create: true
+          cluster_name: vsim1
+          cluster_mgmt_ip: 192.168.0.70

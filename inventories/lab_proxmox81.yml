@@ -36,6 +36,11 @@ all:
           # Install WinSCP
           - "Invoke-WebRequest -Uri https://winscp.net/download/WinSCP-5.19.5-Setup.exe -OutFile C:\\Windows\\temp\\WinSCP-Setup.exe"
           - "C:\\Windows\\temp\\WinSCP-Setup.exe /SILENT /ALLUSERS"
+    centos:
+      hosts:
+        ansible:
+          ip_address: 192.168.0.15
+          install_ansible: true
     proxmox:
       vars:
         vm_memory_mb: 16384
