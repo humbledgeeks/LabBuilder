@@ -113,7 +113,7 @@
 all:
   hosts:
   vars:
-    lab_name: lab_vsoss80
+    lab_name: lab_vsicm80
     lab_prefix: "{{ lab_name }}_"
     lab_password: VMware1!
     lab_vm_datastore: "{{ lab_name }}"
@@ -173,10 +173,10 @@ all:
         sa-esxi-03:
           ip_address: 172.20.10.53
           esx_version: "7.0u3"
-          ovf_file: "files/Nested_ESXi7.0u3_Appliance_Template_v1.ova"
+          ovf_file: "files/Nested_ESXi7.0u3r_Appliance_Template_v1.ova"
       vars:
           esx_version: "8.0u3"
-          ovf_file: "files/Nested_ESXi8.0u3_Appliance_Template_v1.ova"
+          ovf_file: "files/Nested_ESXi8.0u3c_Appliance_Template_v1.ova"
           vm_memory_mb: 16384
           vm_num_cpus: 2
           # vm_disk1_size_gb: 5

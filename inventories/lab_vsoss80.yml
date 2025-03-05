@@ -234,7 +234,7 @@ all:
           ip_address: 172.20.10.56
       vars:
           esx_version: "8.0u3"
-          ovf_file: "files/Nested_ESXi8.0u3_Appliance_Template_v1.ova"
+          ovf_file: "files/Nested_ESXi8.0u3C_Appliance_Template_v1.ova"
           vm_memory_mb: 16384
           vm_num_cpus: 2
           vm_disk1_size_gb: 5

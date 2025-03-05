@@ -10,34 +10,34 @@ vcenter_datacenter: dc3
 
 # Default cluster for new VM provisioning
 # if there is no cluster set it to ""
-vcenter_cluster: "b460c - v7"
+vcenter_cluster: "b200M5"
 cluster_hosts:
-  - dc3-hst-esxi01.humbledgeeks.com
+  - dc3-hst-esxi31.humbledgeeks.com
 #  - dc3-hst-esxi02.humbledgeeks.com
 #  - dc3-hst-esxi03.humbledgeeks.com
 #vcenter_cluster: "Management Cluster"
 
 # Credentials for a host with access to the datastore
 # Used when ISOs are missing from the ISO datastore
-esxi_address: dc3-hst-esxi01.humbledgeeks.com
+esxi_address: dc3-hst-esxi31.humbledgeeks.com
 esxi_username: root
-esxi_password: VMware2024!
+esxi_password: VMware2025!
 
 # If there is a vcenter, this must match the host's name in vcenter inventory
 # if there is no vcenter, the name can be the IP address
 esxi_hostname: "dc3-hst-esxi01.humbledgeeks.com"
 
 # Default datastore for new VMs
-vm_datastore: "LABs"
+vm_datastore: "labbuilder"
 
 # Default datastore for ISO files
-iso_datastore: "LABISOS"
+iso_datastore: "ISO"
 
 # Default portgroup for new VMs
 vm_network: "dc3-apps"
 
 # Default vswitch for new portgroups
-esxi_vswitch: "vSwitch0"
+esxi_vswitch: "vSwitch2"
 
 # uncomment to test ESX target mode
 # vcenter_address: 192.168.123.49
@@ -51,11 +51,11 @@ vlan_start: 1000
 vlan_count: 1000
 
 # ONTAP vars required to build lab pod datastores
-ontap_address: "10.103.15.230"
-ontap_password: "ENT360adm1n^^"
+ontap_address: "10.103.12.30"
+ontap_password: "HybridAdm1n&&"
 ontap_svm_name: "svm0"
 ontap_svm_address: "10.103.15.131"
-ontap_svm_lif: "n1-nfs-lif02"
+ontap_svm_lif: "n1_nfs_lif01"
 ontap_vol_labs: "LABs"
 ontap_vol_size_gb: 500
-ontap_aggregate: "FAS8200_01_SAS_1"
+ontap_aggregate: "n1_aggr1"
