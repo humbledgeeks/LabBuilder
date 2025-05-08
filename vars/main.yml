@@ -47,11 +47,20 @@ vlan_start: 1000
 vlan_count: 1000
 
 # ONTAP vars required to build lab pod datastores
+<<<<<<< HEAD
 ontap_address: "192.168.123.10"
 ontap_password: "P@ssw0rd"
 ontap_svm_name: "svm33"
 ontap_svm_address: "192.168.122.33"
 ontap_svm_lif: "svm33_nfs_33"
 ontap_vol_labs: "Labs"
+=======
+ontap_address: "10.103.12.30"
+ontap_password: "VMware2025!"
+ontap_svm_name: "svm0"
+ontap_svm_address: "10.103.15.131"
+ontap_svm_lif: "n1_nfs_lif01"
+ontap_vol_labs: "LABs"
+>>>>>>> b897b8a (Password)
 ontap_vol_size_gb: 500
 ontap_aggregate: "ots10_01_SSD_1"
