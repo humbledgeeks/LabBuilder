@@ -28,10 +28,10 @@ esxi_hostname: "dc3-hst-esxi31.humbledgeeks.com"
 vm_datastore: "LABs"
 
 # Default datastore for ISO files
-iso_datastore: "ISOs"
+iso_datastore: "ISO"
 
 # Default portgroup for new VMs
-vm_network: ""
+vm_network: "dc3-apps"
 
 # Default vswitch for new portgroups
 esxi_vswitch: "vSwitch2"
@@ -49,10 +49,10 @@ vlan_count: 1000
 
 # ONTAP vars required to build lab pod datastores
 ontap_address: "10.103.12.30"
-ontap_password: "VMware2025!"
+ontap_password: "HybridAdm1n&&"
 ontap_svm_name: "svm0"
 ontap_svm_address: "10.103.15.131"
 ontap_svm_lif: "n1_nfs_lif01"
 ontap_vol_labs: "LABs"
 ontap_vol_size_gb: 500
-ontap_aggregate: "ots10_01_SSD_1"
+ontap_aggregate: "n1_aggr1"
