@@ -5,7 +5,7 @@ all:
     lab_prefix: "{{ lab_name }}_"
     lab_password: P@ssw0rd
     lab_vm_datastore: lab_ansible
-    lab_wan_portgroup: "VM Network"
+    lab_wan_portgroup: "{{ vm_network }}"
     lab_lan1_portgroup: "{{ lab_name }}_net1"
     lab_lan2_portgroup: "{{ lab_name }}_net2"
     lab_lan1_netmask_cidr: "24"
@@ -60,7 +60,7 @@ all:
         ontap9-01:
           partner:      "ontap9-02"
           cluster_name: "ontap9"
-          ovf_version:  "9.7"
+          ovf_version:  "9.15.1"
           cluster_mgmt_ip: 192.168.0.90
           ip_address:      192.168.0.91
           partner_ip:      192.168.0.92
@@ -72,4 +72,4 @@ all:
           fake_ssd_disk_size: 8192
           adp_enabled: "true"
       vars:
-          ovf_version: "9.7"
+          ovf_version: "9.15.1"

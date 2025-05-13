@@ -1,13 +1,13 @@
 all:
   hosts:
   vars:
-    lab_name: lab_select4_vmw7
+    lab_name: lab_select4n_vmw7
     lab_prefix: "{{ lab_name }}_"
     lab_netmask: 255.255.255.0
     lab_password: P@ssw0rd
-    lab_vm_datastore: lab_select4_vmw7
-    lab_wan_portgroup: "VM Network"
-    lab_lan1_portgroup: "lab_select4_vmw7_net1"
+    lab_vm_datastore: lab_select4n_vmw7
+    lab_wan_portgroup: "{{ vm_network }}"
+    lab_lan1_portgroup: "lab_select4n_vmw7_net1"
     lab_lan1_netmask_cidr: "24"
     lab_lan1_netmask: "255.255.255.0"
     lab_lan1_gateway: "192.168.0.1"
@@ -56,23 +56,23 @@ all:
           ip_address: 192.168.0.54
           vm_memory_mb: 22528
       vars:
-          esx_version: "7.0u2"
+          esx_version: "7.0u3"
           vm_num_cpus: 6
           vm_disk1_size_gb: 40
           vm_disk2_size_gb: 2600
           create_local_vmfs: 'False'
           enable_ssh: 'True'
-    # winservers:
-    #   hosts:
-    #     win1:
-    #       ip_address: 192.168.0.41
-    #     win2:
-    #       ip_address: 192.168.0.42
-    #   vars:
-    #       version: "Server2016eval"
-    #       vm_memory_mb: 2048
-    #       vm_num_cpus: 2
-    #       vm_disk_gb: 40
+    winservers:
+      hosts:
+        win1:
+          ip_address: 192.168.0.41
+        win2:
+          ip_address: 192.168.0.42
+      vars:
+          version: "Server2016eval"
+          vm_memory_mb: 2048
+          vm_num_cpus: 2
+          vm_disk_gb: 40
     # centos:
     #   hosts:
     #     ansible:

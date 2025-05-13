@@ -6,7 +6,7 @@ all:
     lab_netmask: 255.255.255.0
     lab_password: P@ssw0rd
     lab_vm_datastore: "{{ lab_name }}"
-    lab_wan_portgroup: "VM Network"
+    lab_wan_portgroup: "{{ vm_network }}"
     lab_lan1_portgroup: "{{ lab_name }}_net1"
     lab_lan1_netmask_cidr: "24"
     lab_lan1_netmask: "255.255.255.0"
@@ -56,7 +56,7 @@ all:
     ontapselecteval:
       hosts:
         ots-01:  
-          ontap_version: "9.14.1RC1"           
+          ontap_version: "9.15.1"           
           ontap_node_mgmt_ip:    192.168.0.91
           ontap_cluster_name:    "demo"
           ontap_cluster_mgmt_ip: 192.168.0.90

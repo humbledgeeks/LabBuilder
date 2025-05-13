@@ -1,13 +1,14 @@
 all:
   hosts:
   vars:
-    lab_name: lab_poc1
+    lab_name: lab_svm_migrate
     lab_prefix: "{{ lab_name }}_"
     lab_netmask: 255.255.255.0
     lab_password: P@ssw0rd
-    lab_vm_datastore: lab_poc1
-    lab_wan_portgroup: "{{ vm_network }}"
-    lab_lan1_portgroup: "lab_poc1"
+    lab_vm_datastore: "{{lab_name}}"
+    lab_wan_portgroup: "{{vm_network}}"
+    lab_lan1_portgroup: "{{lab_prefix}}net1"
+    lab_lan2_portgroup: "{{lab_prefix}}net2"
     lab_lan1_netmask_cidr: "24"
     lab_lan1_netmask: "255.255.255.0"
     lab_lan1_gateway: "192.168.0.1"
@@ -34,30 +35,6 @@ all:
             # Install Putty
             - "Invoke-WebRequest -Uri http://the.earth.li/~sgtatham/putty/0.73/w64/putty-64bit-0.73-installer.msi -OutFile C:\\Windows\\temp\\putty-64bit-installer.msi"
             - "MsiExec.exe /i C:\\Windows\\temp\\putty-64bit-installer.msi /qn"
-    aiqum:
-      hosts:
-        aiqum:
-          ip_address: 192.168.0.28
-    storagegrid:
-      vars:
-        admin_ip: 192.168.123.170
-        vm_num_cpus: 1
-        vm_memory_mb: 8192
-      hosts:
-        sgws-admin:
-          ip_address: 192.168.123.170
-          node_type: "VM_Admin_Node"
-          vm_memory_mb: 12288
-        sgws-storage1:
-          ip_address: 192.168.123.171
-          node_type: "VM_Storage_Node"
-        sgws-storage2:
-          ip_address: 192.168.123.172
-          node_type: "VM_Storage_Node"
-        sgws-storage3:
-          ip_address: 192.168.123.173
-          node_type: "VM_Storage_Node"
-
     winservers:
       hosts:
         win1:
@@ -68,28 +45,44 @@ all:
           vm_disk_gb: 40
     centos:
       hosts:
-        ansible:
-          ip_address: 192.168.0.15
-          version: "7"
-        centos1:
+        # ansible:
+        #   ip_address: 192.168.0.15
+        #   version: "7"
+        linux1:
           ip_address: 192.168.0.14
-          version: "7"
-      vars:
+          distro: "rocky"
+          version: "8"
+          install_xrdp: true
+      # vars:
     vsims:
       hosts:
-        vsim1-01:
-          ip_address: 192.168.0.71
-          sys_serial_number: "4082368-50-7"
-          cluster_setup: true
-          cluster_name: vsim1
-          cluster_mgmt_ip: 192.168.0.70
-        vsim2-01:
-          ip_address: 192.168.0.81
-          sys_serial_number: "4082368-50-7"
-          cluster_setup: false
-        vsim2-02:
-          ip_address: 192.168.0.82
-          sys_serial_number: "4034389-06-2"
-          cluster_setup: false
-      vars:
-          ovf_version: "9.15.1"
+        # Cluster1 will be a 4-node with 2 HA pairs
+        cluster1-01:
+          partner:      "cluster1-02"
+          cluster_name: "cluster1"
+          ovf_version:  "9.15.1"
+          cluster_mgmt_ip: 192.168.0.90
+          ip_address:      192.168.0.91
+          partner_ip:      192.168.0.92
+          disk_model: "vscsi"
+          shelf0_disk_size: 8192
+          shelf0_disk_count: 12
+          shelf1_disk_size: 8192
+          shelf1_disk_count: 12
+          fake_ssd_disk_size: 8192
+          adp_enabled: "true"
+        # Cluster2 will be a single node cluster
+        cluster2-01:
+          partner: "cluster2-02"
+          cluster_name: "cluster2"
+          ovf_version:  "9.15.1"
+          cluster_mgmt_ip: 192.168.0.80
+          ip_address:      192.168.0.81
+          partner_ip:      192.168.0.82
+          disk_model: "vscsi"
+          shelf0_disk_size: 8192
+          shelf0_disk_count: 12
+          shelf1_disk_size: 8192
+          shelf1_disk_count: 12
+          fake_ssd_disk_size: 8192
+          adp_enabled: "true"
