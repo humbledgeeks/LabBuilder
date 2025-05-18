@@ -35,30 +35,30 @@ all:
     ontapselecteval:
       hosts:
         cluster1:  
-          ontap_version: "9.13.1"           
+          ontap_version: "9.15.1"           
           ontap_node_mgmt_ip:    192.168.0.111
           ontap_cluster_name:    "cluster1"
           ontap_cluster_mgmt_ip: 192.168.0.110
           vm_data_disk_gb:       1024
         cluster2:  
-          ontap_version: "9.13.1"           
+          ontap_version: "9.15.1"           
           ontap_node_mgmt_ip:    192.168.0.121
           ontap_cluster_name:    "cluster2"
           ontap_cluster_mgmt_ip: 192.168.0.120
           vm_data_disk_gb:       1024
         cluster3:  
-          ontap_version: "9.13.1"           
+          ontap_version: "9.15.1"           
           ontap_node_mgmt_ip:    192.168.0.131
           ontap_cluster_name:    "cluster3"
           ontap_cluster_mgmt_ip: 192.168.0.130
           vm_data_disk_gb:       1024
           
-    # centos:
-    #   hosts:
-    #     ansible:
-    #       ip_address: 192.168.0.43
-    #       version: "8"
-    #     centos1:
-    #       ip_address: 192.168.0.44
-    #       version: "7"
+    centos:
+     hosts:
+       ansible:
+         ip_address: 192.168.0.43
+         version: "8"
+       centos1:
+         ip_address: 192.168.0.44
+         version: "7"
     #   vars:

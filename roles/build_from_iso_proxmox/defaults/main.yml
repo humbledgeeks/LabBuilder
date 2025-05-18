@@ -1,5 +1,5 @@
-install_iso: "proxmox-ve_8.1-1.iso"
-install_iso_url: "https://enterprise.proxmox.com/iso/proxmox-ve_8.1-1.iso"
+install_iso: "proxmox-ve_8.4-1.iso"
+install_iso_url: "https://enterprise.proxmox.com/iso/proxmox-ve_8.4-1.iso"
 
 
 vm_address:      
