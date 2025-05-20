@@ -5,7 +5,7 @@ all:
     lab_prefix: "{{ lab_name }}_"
     lab_password: P@ssw0rd
     lab_vm_datastore: "{{ lab_name }}"
-    lab_wan_portgroup: "VM Network"
+    lab_wan_portgroup: "{{ vm_network }}"
     lab_lan1_portgroup: "{{ lab_name }}_net1"
     lab_lan1_netmask_cidr: "24"
     lab_lan1_netmask: "255.255.255.0"
@@ -70,7 +70,7 @@ all:
         ontap-01:
           partner:      "ontap-02"
           cluster_name: "ontap"
-          ovf_version:  "9.12.1"
+          ovf_version:  "9.15.1"
           cluster_mgmt_ip: 192.168.0.90
           ip_address:      192.168.0.91
           partner_ip:      192.168.0.92
@@ -93,7 +93,7 @@ all:
       hosts:
         aiqum:
           ip_address: 192.168.0.28
-          ovf_file: files/ActiveIQUnifiedManager-9.13.ova
+          ovf_file: files/ActiveIQUnifiedManager-9.15.ova
     ovf:
       vars:
       hosts:
