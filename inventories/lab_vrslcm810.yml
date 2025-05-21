@@ -1,6 +1,7 @@
 
 # Inventory - Hosts & Clusters
 ##############################
+# vREALIZE
 # sa-vcsa-01.vclass.local       #vcenter
 #   SA-Datacenter               #datacenter
 #     SA-Compute-01             #cluster
