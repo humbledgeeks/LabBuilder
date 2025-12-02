@@ -59,3 +59,5 @@ roles/build_from_iso_windows/files/Server2016eval/*
 roles/build_from_iso_windows/files/Server2019eval/*
 roles/build_from_iso_windows/files/Server2025eval/*
 files/BlueXP-Connector-Cloud-v3.9.55
+files/NetApp_PowerShell_Toolkit_9.8.0.msi
+vars/main-e360.yml
