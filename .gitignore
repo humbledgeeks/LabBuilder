@@ -65,3 +65,4 @@ vars/main-e360.yml
 *.ISO
 *.ova
 *.OVA
+VMware_tools.exe
