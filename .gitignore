@@ -67,3 +67,4 @@ vars/main-e360.yml
 *.OVA
 VMware_tools.exe
 VMware_tools.exe
+files/lab_veeam00_dc01/files/
