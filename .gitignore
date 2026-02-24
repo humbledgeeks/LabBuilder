@@ -63,3 +63,5 @@ files/NetApp_PowerShell_Toolkit_9.8.0.msi
 vars/main-e360.yml
 *.iso
 *.ISO
+*.ova
+*.OVA
