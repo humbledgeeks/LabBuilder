@@ -10,7 +10,7 @@
     folder: /
     name: '{{ vm_name }}'
     state: present
-    guest_id: vmkernel8Guest
+    guest_id: otherGuest64
     datastore: '{{ vm_datastore }}'
     cdrom:
         - controller_number: 0

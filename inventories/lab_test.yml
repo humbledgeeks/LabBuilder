@@ -327,7 +327,7 @@ all:
           ovf_version: "9.16.1"
           ip_address:    192.168.0.142
           sys_serial_number: "408236-85-08"
-          update_package: files/9171RC1_v_image.tgz
+          # update_package: files/9171RC1_v_image.tgz
           disk_model: "vscsi"
           shelf0_disk_size: 4096
           shelf0_disk_count: 12

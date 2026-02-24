@@ -75,7 +75,10 @@
     ignore_errors: yes
     loop:
       - "Add-DnsServerResourceRecordA -Name {{inventory_hostname}} -ZoneName {{lab_domain_name}} -AllowUpdateAny -IPv4Address {{ip_address}} -TimeToLive 01:00:00"
-    when: lab_domain_controller|default("") != ""
+    when: 
+      - lab_domain_controller|default("") != ""
+      - ip_address is defined
+
 
 # Build vCenter Server(s)
 - name: Build vCenter

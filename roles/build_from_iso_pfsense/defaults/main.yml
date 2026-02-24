@@ -11,10 +11,13 @@ install_iso_url: "https://atxfiles.netgate.com/mirror/downloads/pfSense-CE-2.7.1
 install_timer: 60
 boot_timer: 90
 
+# Disable VMware Tools / guest operations for pfSense builds (default)
+# pfsense_use_guest_ops: false
+
 # defaults
 vm_name: "pfsense"
 vm_password_new: "P@ssw0rd"
-vm_network_wan: "VM Network"
+vm_network_wan: "{{ vm_network }}"
 vm_network_lan: ""
 vm_network_opt1: ""
 vm_disk_gb: 10

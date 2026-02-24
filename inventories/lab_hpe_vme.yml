@@ -1,0 +1,162 @@
+all:
+  hosts:
+  vars:
+    lab_name: "lab_hpe_vme"
+    lab_prefix: "{{ lab_name }}_"
+    lab_password: P@ssw0rd
+    lab_vm_datastore: "{{ lab_name }}"
+    lab_wan_portgroup: "{{ vm_network }}"
+    lab_lan1_portgroup: "{{ lab_name }}_net1"
+    lab_lan2_portgroup: "{{ lab_name }}_net2"
+    lab_lan1_netmask_cidr: "24"
+    lab_lan1_netmask: "255.255.255.0"
+    lab_lan1_gateway: "192.168.0.1"
+    lab_lan1_dns_ip: "192.168.0.1"
+    lab_domain_name:   "lab.local"
+    lab_domain_controller: "dc01"
+  children:
+    pfsense:
+      hosts:
+        gateway:
+          vm_network_wan: "{{lab_wan_portgroup}}"
+          vm_network_lan: "{{lab_lan1_portgroup}}"
+          config_xml_file: "files/pfsense/lab_hpe_vme.xml"
+    dc:
+      hosts:
+        dc01:
+          version: "Server2022eval"
+          ip_address: 192.168.0.11
+          extra_files_urls:
+            - https://dl.google.com/chrome/install/googlechromestandaloneenterprise64.msi
+            - http://the.earth.li/~sgtatham/putty/0.83/w64/putty-64bit-0.83-installer.msi
+          extra_commands:
+            - MsiExec.exe /i E:\files\putty-64bit-0.83-installer.msi /qn
+            - MsiExec.exe /i E:\files\googlechromestandaloneenterprise64.msi /qn
+          serial_ports:
+            - type: 'pipe'
+              pipe_name: '\\.\pipe\{{lab_prefix}}com1'
+              endpoint: 'server'
+            - type: 'pipe'
+              pipe_name: '\\.\pipe\{{lab_prefix}}com2'
+              endpoint: 'server'
+    winservers:
+      hosts:
+        JUMP01:
+          ip_address: 192.168.0.22
+          version: "Server2025eval"
+          vm_disk_gb: 80
+      vars:
+          vm_memory_mb: 4096
+          vm_num_cpus: 2
+          vm_disk_gb: 40
+          join_domain: true
+          extra_files_urls:
+            - https://dl.google.com/chrome/install/googlechromestandaloneenterprise64.msi
+            - http://the.earth.li/~sgtatham/putty/0.83/w64/putty-64bit-0.83-installer.msi
+          extra_commands:
+            - "MsiExec.exe /i E:\\files\\putty-64bit-0.83-installer.msi /qn"
+            - "MsiExec.exe /i E:\\files\\googlechromestandaloneenterprise64.msi /qn"
+
+    ubuntu:
+      vars:
+        vm_memory_mb: 8192
+        vm_num_cpus: 4
+        vm_disk_gb: 100 
+        install_xrdp: false
+        install_ansible: true
+      hosts:
+        hpe_vme01: 
+          state: present 
+          ip_address: 192.168.0.25
+          version: "server"
+          distro: "24.04"
+          extra_commands:
+            # Ensure hostname matches DNS
+            - "sudo hostnamectl set-hostname hpe_vme01"
+            # Update OS and clean up
+            - "sudo apt update && apt -y upgrade && apt -y autoremove"
+            # Base tools / dependencies
+            - "sudo apt install -y curl wget net-tools apt-transport-https ca-certificates gnupg software-properties-common unzip tar openssl jq git screen"
+            - "sudo apt install -y linux-generic-hwe-24.04"
+            # - wget https://raw.githubusercontent.com/PSP-Archive/ARK-4/refs/heads/main/contrib/PC/PSPSDK/ark4_pspsdk_installer.sh
+            # - chmod +x ark4_pspsdk_installer.sh 
+        hpe_vme02:
+          state: force
+          ip_address: 192.168.0.26
+          version: "20.04"
+          extra_commands:
+            # Ensure hostname matches DNS
+            - "sudo hostnamectl set-hostname hpe_vme01"
+            # Update OS and clean up
+            - "sudo apt update && apt -y upgrade && apt -y autoremove"
+            # Base tools / dependencies
+            - "sudo apt install -y curl wget net-tools apt-transport-https ca-certificates gnupg software-properties-common unzip tar openssl jq git screen"
+            - "sudo apt install -y linux-generic-hwe-24.04"
+        hpe_vme03:
+          state: force
+          ip_address: 192.168.0.27
+          version: "20.04"
+          extra_commands:
+            # Ensure hostname matches DNS
+            - "sudo hostnamectl set-hostname hpe_vme01"
+            # Update OS and clean up
+            - "sudo apt update && apt -y upgrade && apt -y autoremove"
+            # Base tools / dependencies
+            - "sudo apt install -y curl wget net-tools apt-transport-https ca-certificates gnupg software-properties-common unzip tar openssl jq git screen"
+            - "sudo apt install -y linux-generic-hwe-24.04"
+    vcenter:
+      hosts:
+        vcsa:
+          ip_address: 192.168.0.50
+          vm_fqdn: "vcsa.lab.local"
+          ovf_file: "files/VMware-vCenter-Server-Appliance-8.0.3.00000-24022515_OVF10.ova"
+    esx:
+      hosts:
+        esx01:
+          ip_address: 192.168.0.51
+          install_iso: "VMware-VMvisor-Installer-8.0U3-24022510.x86_64.iso"
+        esx02:
+          ip_address: 192.168.0.52
+          install_iso: "VMware-VMvisor-Installer-8.0U3-24022510.x86_64.iso"
+        esx03:
+          ip_address: 192.168.0.53
+          install_iso: "VMware-VMvisor-Installer-8.0U3-24022510.x86_64.iso"
+      vars:
+          install_iso: "VMware-VMvisor-Installer-8.0U3-24022510.x86_64.iso"
+          vm_memory_mb: 10240
+          vm_num_cpus: 2
+          disk_controller: nvme
+          vm_disk1_size_gb: 6
+          vm_disk2_size_gb: 60
+          vm_disk3_size_gb: 80
+          create_local_vmfs: 'False'
+          enable_ssh: 'True'
+    vsims:
+      hosts:
+        demo1-01:
+          partner:      "demo1-02"
+          cluster_name: "demo"
+          version:  "9.15.1"
+          #update_package: files/9171RC1_v_image.tgz
+          cluster_network: "{{ lab_lan2_portgroup }}"
+          cluster_mgmt_ip: 192.168.0.160
+          ip_address:      192.168.0.161
+          partner_ip:      192.168.0.162
+          disk_model: "vscsi"
+          shelf0_disk_size: 8192
+          shelf0_disk_count: 24
+          shelf1_disk_size: 8192
+          shelf1_disk_count: 24
+          shelf3_disk_size: 8192
+          shelf3_disk_count: 24
+          fake_ssd_disk_size: 8192
+          adp_enabled: "true"
+          sys_serial_number: "408236-85-07"
+          partner_serial: "408236-85-08"
+          extra_commands:
+            - sleep 180 # give nodes time to join
+            - node run demo1-01 disk assign all
+            - node run demo1-02 disk assign all
+            - cluster ha modify -configured true
+            - storage aggregate create -aggregate aggr1 -diskcount 8 -node demo1-01
+            - storage aggregate create -aggregate aggr2 -diskcount 8 -node demo1-02
