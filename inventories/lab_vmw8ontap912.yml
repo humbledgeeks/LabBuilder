@@ -50,10 +50,10 @@ all:
           ip_address: 192.168.0.51
         esx02:
           ip_address: 192.168.0.52
-        # esx03:
-        #   ip_address: 192.168.0.53
-        # esx04:
-        #   ip_address: 192.168.0.54
+        esx03:
+          ip_address: 192.168.0.53
+        esx04:
+          ip_address: 192.168.0.54
       vars:
           esx_version: "8.0"
           vm_memory_mb: 10240
